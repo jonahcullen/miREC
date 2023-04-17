@@ -76,8 +76,8 @@ then
     do
 	#----recurring prepare ----: finish error correction, recount 'kmer frequency' and 'read frequency' and 'id_read'
 	#recount 'kmer frequency', then create kmer.freq (e.g. 5mer.freq)
-	./kmc -k${i} -fq -ci1 ./correct_read.fastq tmp${i} ./
-	./kmc_dump -t tmp${i} tmpkc${i}
+	/opt/hoof/src/miREC/kmc -k${i} -fq -ci1 ./correct_read.fastq tmp${i} ./
+	/opt/hoof/src/miREC/kmc_dump -t tmp${i} tmpkc${i}
 	sort -nk2 -r tmpkc${i} > ./${i}mer.freq
 	rm tmp*
 
@@ -86,9 +86,9 @@ then
 	echo "----------------------${i} mer frequency preparation ready";
 
 	#error correction
-	echo "./miREC_fq -k ${i} -m ${i}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt"
+	echo "/opt/hoof/src/miREC/miREC_fq -k ${i} -m ${i}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt"
 
-	./miREC_fq -k ${i} -m ./${i}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt;
+	/opt/hoof/src/miREC/miREC_fq -k ${i} -m ./${i}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt;
 
 	cp ID_read_quality_cor.txt ID_read_quality_input.txt 
 	#cp correct_read.fa correct_read_cp.fa
@@ -107,22 +107,22 @@ else
     do
 	#----recurring prepare ----: finish error correction, recount 'kmer frequency' and 'read frequency' and 'id_read'
 	#recount 'kmer frequency', then create kmer.freq (e.g. 5mer.freq)
-	./kmc -t -k${i} -fq -ci1 ./correct_read.fastq tmp${i} ./
-	./kmc_dump -t tmp${i} tmpkc${i}
+	/opt/hoof/src/miREC/kmc -t -k${i} -fq -ci1 ./correct_read.fastq tmp${i} ./
+	/opt/hoof/src/miREC/kmc_dump -t tmp${i} tmpkc${i}
 	sort -nk2 -r tmpkc${i} > ./${i}mer.freq
 	rm tmp*
 
 	#recount '(k-1)mer frequency', then create kmer.freq (e.g. 5mer.freq)
 	tmpm=$(($i-1))
-	./kmc -t -k${tmpm} -fq -ci1 ./correct_read.fastq tmp${tmpm} ./
-	./kmc_dump -t tmp${tmpm} tmpkc${tmpm}
+	/opt/hoof/src/miREC/kmc -t -k${tmpm} -fq -ci1 ./correct_read.fastq tmp${tmpm} ./
+	/opt/hoof/src/miREC/kmc_dump -t tmp${tmpm} tmpkc${tmpm}
 	sort -nk2 -r tmpkc${tmpm} > ./${tmpm}mer.freq
 	rm tmp*
 
 	#recount '(k+1)mer frequency', then create kmer.freq (e.g. 5mer.freq)
 	tmpa=$(($i+1))
-	./kmc -t -k${tmpa} -fq -ci1 ./correct_read.fastq tmp${tmpa} ./
-	./kmc_dump -t tmp${tmpa} tmpkc${tmpa}
+	/opt/hoof/src/miREC/kmc -t -k${tmpa} -fq -ci1 ./correct_read.fastq tmp${tmpa} ./
+	/opt/hoof/src/miREC/kmc_dump -t tmp${tmpa} tmpkc${tmpa}
 	sort -nk2 -r tmpkc${tmpa} > ./${tmpa}mer.freq
 	rm tmp*
 
@@ -134,7 +134,7 @@ else
 	echo "./miREC_mix_fq -k ${i} -m ${i}mer.freq -s ${tmpm}mer.freq -b ${tmpa}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt";
 
 	# time ./miREC_fq_update -k ${i} -m /home/xuanzhan/Data/miRNA/simu/${i}mer.freq -l expreLevel_cor.txt -f ID_read_quality_input.txt >> miREC_mix${file_id[${j}]}.log;
-	./miREC_mix_fq -k ${i} -m ${i}mer.freq -s ${tmpm}mer.freq -b ${tmpa}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt;
+	/opt/hoof/src/miREC/miREC_mix_fq -k ${i} -m ${i}mer.freq -s ${tmpm}mer.freq -b ${tmpa}mer.freq -t ${T} -r ${H} -l expreLevel_cor.txt -f ID_read_quality_input.txt;
 
 	echo "----------------------${i} mer correction finished";
 
